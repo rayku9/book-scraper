@@ -12,4 +12,5 @@ Scrapes a Barnes & Noble page for books
 ```
 
 ! Behavior may change if b&n website changes their HTML structure
+
 ! Project is for personal/educational use
