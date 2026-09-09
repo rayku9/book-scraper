@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book List</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #222; }
+    h1 { font-size: 1.4rem; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 10px 0; border-bottom: 1px solid #eee; }
+    .title { font-weight: 600; }
+    .author { color: #666; font-size: 0.95rem; }
+    #status { color: #888; }
+  </style>
+</head>
+<body>
+  <h1>Teen Science &amp; Technology Books</h1>
+  <p id="status">Loading&hellip;</p>
+  <ul id="book-list"></ul>
+
+  <script>
+    fetch('/getbooks')
+      .then(res => res.json())
+      .then(data => {
+        const status = document.getElementById('status');
+        const list = document.getElementById('book-list');
+
+        if (data.error) {
+          status.textContent = 'Error: ' + data.error;
+          return;
+        }
+
+        if (data.length === 0) {
+          status.textContent = 'No books found: the site layout may have changed.';
+          return;
+        }
+
+        status.remove();
+        data.forEach(book => {
+          const li = document.createElement('li');
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'title';
+          titleDiv.textContent = book.title;
+          const authorDiv = document.createElement('div');
+          authorDiv.className = 'author';
+          authorDiv.textContent = book.author;
+          li.appendChild(titleDiv);
+          li.appendChild(authorDiv);
+          list.appendChild(li);
+        });
+      })
+      .catch(() => {
+        document.getElementById('status').textContent = 'Failed to load books.';
+      });
+  </script>
+</body>
+</html>
